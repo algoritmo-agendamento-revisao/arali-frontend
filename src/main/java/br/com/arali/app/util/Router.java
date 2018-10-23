@@ -5,12 +5,14 @@ import org.reflections.Reflections;
 import java.util.Set;
 
 import static spark.Spark.port;
+import static spark.Spark.staticFiles;
 
 public class Router {
 
     public static void load(){
         try {
             port(8080);
+            staticFiles.externalLocation("src/main/resources/assets");
             Router.loadRoutes();
         } catch (Exception e) {
             e.printStackTrace();

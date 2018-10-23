@@ -60,9 +60,7 @@ public class DAOCard implements DAO<Card> {
     public boolean delete(Long id) throws SQLException, ClassNotFoundException, JAXBException {
         EntityManager em = EntityFactory.getInstance().createEntityManager();
         em.getTransaction().begin();
-        Card card = new Card();
-        card.setId(id);
-        em.remove(card);
+        em.remove(em.getReference(Card.class, id));
         em.getTransaction().commit();
         boolean result = em.getTransaction().getRollbackOnly();
         if(result) em.getTransaction().rollback();

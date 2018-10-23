@@ -36,8 +36,16 @@ public class CardController extends DefaultController {
     }
 
     @Override
-    public Object delete(Request req, Response res) {
-        return null;
+    public Object delete(Request req, Response res, Long id) {
+        Gson gson      = new Gson();
+        DAOCard dao    = new DAOCard();
+        boolean result = false;
+        try {
+            result = dao.delete(id);
+        } catch (SQLException | ClassNotFoundException | JAXBException e) {
+            e.printStackTrace();
+        }
+        return gson.toJson(result);
     }
 
     @Override
