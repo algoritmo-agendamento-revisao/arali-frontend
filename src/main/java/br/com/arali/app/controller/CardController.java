@@ -5,15 +5,25 @@ import br.com.arali.app.util.DefaultController;
 import com.github.mirreck.FakeFactory;
 import com.google.gson.Gson;
 import br.com.arali.app.model.Card;
+import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
+import spark.Spark;
+import spark.template.mustache.MustacheTemplateEngine;
 
 import javax.xml.bind.JAXBException;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 
 @Controller(resource="card")
 public class CardController extends DefaultController {
+
+    public CardController(){
+        Spark.get("/card", (req, res) -> {
+            return new ModelAndView(new HashMap(), "src/main/resources/template/card.html");
+        }, new MustacheTemplateEngine());
+    }
 
     @Override
     public Object create(Request req, Response res) {
@@ -23,10 +33,11 @@ public class CardController extends DefaultController {
         DAOCard dao = new DAOCard();
         try {
             card = dao.insert(card);
+            res.status(202);
         } catch (SQLException | ClassNotFoundException | JAXBException e) {
             e.printStackTrace();
+            res.status(505);
         }
-        res.status(202);
         return gson.toJson(card);
     }
 

@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.List;
 
 @Entity
 @Table(name="cards")
@@ -12,13 +13,10 @@ public class Card {
     @GeneratedValue
     private Long id;
     private Double difficulty;
-
-    /*
     private List<Tag> tags;
     private List<Option> options;
     private Option optionCorrect;
     private Multimedia multimedia;
-    */
 
     public Long getId() {
         return id;

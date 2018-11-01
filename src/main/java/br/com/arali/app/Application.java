@@ -13,5 +13,10 @@ public class Application {
         Spark.get("/", (req, resp) -> {
             return new ModelAndView(new HashMap(), "src/main/resources/template/index.html");
         }, new MustacheTemplateEngine());
+
+
+        Spark.get("/study", (req, resp) -> {
+            return new ModelAndView(new HashMap(), "src/main/resources/template/study.html");
+        }, new MustacheTemplateEngine());
     }
 }
