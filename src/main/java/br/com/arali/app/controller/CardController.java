@@ -1,5 +1,6 @@
 package br.com.arali.app.controller;
 import br.com.arali.app.model.dao.DAOCard;
+import br.com.arali.app.model.dao.DAOOption;
 import br.com.arali.app.util.Controller;
 import br.com.arali.app.util.DefaultController;
 import com.github.mirreck.FakeFactory;
@@ -16,7 +17,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 
-@Controller(resource="card")
+@Controller(resource="cards")
 public class CardController extends DefaultController {
 
     public CardController(){
@@ -30,13 +31,17 @@ public class CardController extends DefaultController {
         res.type("application/json");
         Gson gson = new Gson();
         Card card = gson.fromJson(req.body(), Card.class);
-        DAOCard dao = new DAOCard();
+        DAOCard daoCard = new DAOCard();
         try {
-            card = dao.insert(card);
+            card = daoCard.insert(card);
+            card.saveOptions(new DAOOption());
             res.status(202);
         } catch (SQLException | ClassNotFoundException | JAXBException e) {
             e.printStackTrace();
             res.status(505);
+        } catch (Exception e) {
+            res.status(505);
+            e.printStackTrace();
         }
         return gson.toJson(card);
     }

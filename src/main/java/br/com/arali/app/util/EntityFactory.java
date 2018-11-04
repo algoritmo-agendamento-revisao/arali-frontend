@@ -9,7 +9,7 @@ public class EntityFactory extends LocalContainerEntityManagerFactoryBean{
     public static EntityManagerFactory getInstance(){
         if(entityManagerFactory == null || !entityManagerFactory.isOpen()){
             EntityFactory self = new EntityFactory();
-            self.setPersistenceUnitName("retrieve");
+            self.setPersistenceUnitName("arali");
             self.setPersistenceXmlLocation("file:config.xml");
             entityManagerFactory = self.createNativeEntityManagerFactory();
         }

@@ -1,6 +1,6 @@
 package br.com.arali.app.controller;
 
-import br.com.arali.app.model.Card;
+import br.com.arali.app.model.Deck;
 import br.com.arali.app.model.Tag;
 import br.com.arali.app.model.dao.DAOCard;
 import br.com.arali.app.model.dao.DAODeck;
@@ -20,28 +20,28 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 
-@Controller(resource = "tags")
-public class TagController extends DefaultController {
+@Controller(resource = "decks")
+public class DeckController extends DefaultController {
 
-    public TagController(){
-        Spark.get("/tag", (req, res) -> {
-            return new ModelAndView(new HashMap(), "src/main/resources/template/tag.html");
+    public DeckController(){
+        Spark.get("/deck", (req, res) -> {
+            return new ModelAndView(new HashMap(), "src/main/resources/template/deck.html");
         }, new MustacheTemplateEngine());
     }
 
     @Override
     public Object create(Request req, Response res) {
-        DAO<Tag> dao = new DAOTag();
-        Gson gson    = new Gson();
-        Tag tag      = gson.fromJson(req.body(), Tag.class);
+        DAO<Deck> dao = new DAODeck();
+        Gson gson     = new Gson();
+        Deck deck     = gson.fromJson(req.body(), Deck.class);
         try {
-            tag = dao.insert(tag);
+            deck = dao.insert(deck);
             res.status(202);
         } catch (SQLException | ClassNotFoundException | JAXBException e) {
             e.printStackTrace();
             res.status(505);
         }
-        return gson.toJson(tag);
+        return gson.toJson(deck);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class TagController extends DefaultController {
     @Override
     public Object delete(Request req, Response res, Long id) {
         Gson gson      = new Gson();
-        DAOTag dao     = new DAOTag();
+        DAODeck dao    = new DAODeck();
         boolean result = false;
         try {
             result = dao.delete(id);
@@ -64,23 +64,24 @@ public class TagController extends DefaultController {
 
     @Override
     public Object find(Request req, Response res, Long id) {
-        Tag tag = null;
+        Deck deck = null;
         try {
-            tag = new DAOTag().find(id);
+            deck = new DAODeck().find(id);
         } catch (SQLException | ClassNotFoundException | JAXBException e) {
             e.printStackTrace();
         }
-        return new Gson().toJson(tag);
+        return new Gson().toJson(deck);
     }
 
     @Override
     public Object findAll(Request req, Response res) {
-        List<Tag> tags = null;
+        List<Deck> decks = null;
         try {
-            tags = new DAOTag().findAll();
+            decks = new DAODeck().findAll();
         } catch (SQLException | ClassNotFoundException | JAXBException e) {
             e.printStackTrace();
         }
-        return new Gson().toJson(tags);
+        return new Gson().toJson(decks);
     }
+
 }

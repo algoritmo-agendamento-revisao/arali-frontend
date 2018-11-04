@@ -1,7 +1,7 @@
 package br.com.arali.app.model.dao;
 
+import br.com.arali.app.model.Card;
 import br.com.arali.app.model.Deck;
-import br.com.arali.app.model.Tag;
 import br.com.arali.app.util.DAO;
 import br.com.arali.app.util.EntityFactory;
 import org.hibernate.Session;
@@ -10,9 +10,9 @@ import javax.xml.bind.JAXBException;
 import java.sql.SQLException;
 import java.util.List;
 
-public class DAOTag implements DAO<Tag> {
+public class DAODeck implements DAO<Deck> {
     @Override
-    public Tag insert(Tag obj) throws SQLException, ClassNotFoundException, JAXBException {
+    public Deck insert(Deck obj) throws SQLException, ClassNotFoundException, JAXBException {
         EntityManager em = EntityFactory.getInstance().createEntityManager();
         em.getTransaction().begin();
         em.persist(obj);
@@ -25,7 +25,7 @@ public class DAOTag implements DAO<Tag> {
     }
 
     @Override
-    public boolean edit(Tag obj) throws SQLException, ClassNotFoundException, JAXBException {
+    public boolean edit(Deck obj) throws SQLException, ClassNotFoundException, JAXBException {
         EntityManager em = EntityFactory.getInstance().createEntityManager();
         em.getTransaction().begin();
         em.merge(obj);
@@ -38,26 +38,26 @@ public class DAOTag implements DAO<Tag> {
     }
 
     @Override
-    public Tag find(Long id) throws SQLException, ClassNotFoundException, JAXBException {
+    public Deck find(Long id) throws SQLException, ClassNotFoundException, JAXBException {
         EntityManager em = EntityFactory.getInstance().createEntityManager();
-        Tag tag = em.find(Tag.class, id);
+        Deck deck = em.find(Deck.class, id);
         em.close();
-        return tag;
+        return deck;
     }
 
     @Override
-    public List<Tag> findAll() throws SQLException, ClassNotFoundException, JAXBException {
+    public List<Deck> findAll() throws SQLException, ClassNotFoundException, JAXBException {
         Session session  = (Session) EntityFactory.getInstance().createEntityManager().getDelegate();
-        List<Tag> tags = session.createCriteria(Tag.class).list();
+        List<Deck> decks = session.createCriteria(Deck.class).list();
         session.close();
-        return tags;
+        return decks;
     }
 
     @Override
     public boolean delete(Long id) throws SQLException, ClassNotFoundException, JAXBException {
         EntityManager em = EntityFactory.getInstance().createEntityManager();
         em.getTransaction().begin();
-        em.remove(em.getReference(Tag.class, id));
+        em.remove(em.getReference(Deck.class, id));
         em.getTransaction().commit();
         boolean result = em.getTransaction().getRollbackOnly();
         if(result) em.getTransaction().rollback();

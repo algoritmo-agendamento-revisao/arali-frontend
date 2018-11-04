@@ -1,9 +1,6 @@
 package br.com.arali.app.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigInteger;
 
 @Entity
@@ -12,5 +9,27 @@ public class Option {
     @Id
     @GeneratedValue
     private Long id;
+    @Column(name = "card_fk")
+    private Long cardId;
     private String value;
+
+    public Long getCardId() {
+        return cardId;
+    }
+
+    public void setCardId(Long cardId) {
+        this.cardId = cardId;
+    }
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public String getValue(){
+        return this.value;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }
