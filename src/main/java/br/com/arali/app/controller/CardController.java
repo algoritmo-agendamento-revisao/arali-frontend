@@ -1,6 +1,8 @@
 package br.com.arali.app.controller;
 import br.com.arali.app.model.dao.DAOCard;
+import br.com.arali.app.model.dao.DAODeck;
 import br.com.arali.app.model.dao.DAOOption;
+import br.com.arali.app.model.dao.DAOTag;
 import br.com.arali.app.util.Controller;
 import br.com.arali.app.util.DefaultController;
 import com.github.mirreck.FakeFactory;
@@ -32,9 +34,12 @@ public class CardController extends DefaultController {
         Gson gson = new Gson();
         Card card = gson.fromJson(req.body(), Card.class);
         DAOCard daoCard = new DAOCard();
+        DAODeck daoDeck = new DAODeck();
+        DAOTag daoTag   = new DAOTag();
         try {
             card = daoCard.insert(card);
             card.saveOptions(new DAOOption());
+            card.saveRelations(daoDeck, daoTag);
             res.status(202);
         } catch (SQLException | ClassNotFoundException | JAXBException e) {
             e.printStackTrace();

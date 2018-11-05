@@ -12,7 +12,7 @@ public class Tag {
     private Long id;
     private String label;
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @Transient
+    @JoinTable(name = "tags_cards", joinColumns = @JoinColumn(name = "tag_fk", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "card_fk", referencedColumnName = "id"))
     private List<Card> cards;
 
     public Tag(){
@@ -21,5 +21,9 @@ public class Tag {
 
     public void addCard(Card card) {
         this.cards.add(card);
+    }
+
+    public Long getId() {
+        return this.id;
     }
 }

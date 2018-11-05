@@ -1,7 +1,9 @@
 package br.com.arali.app.model;
 
 import br.com.arali.app.model.dao.DAOCard;
+import br.com.arali.app.model.dao.DAODeck;
 import br.com.arali.app.model.dao.DAOOption;
+import br.com.arali.app.model.dao.DAOTag;
 import br.com.arali.app.util.DAO;
 import javax.persistence.*;
 import javax.xml.bind.JAXBException;
@@ -22,9 +24,11 @@ public class Card {
     private Option optionCorrect;
     @Transient
     private Multimedia multimedia;
-    @ManyToMany
+    @ManyToMany(mappedBy = "cards")
+    @Transient
     private List<Deck> decks;
-    @ManyToMany
+    @ManyToMany(mappedBy = "cards")
+    @Transient
     private List<Tag> tags;
     @OneToMany
     @JoinColumn(name = "card_fk")
@@ -68,4 +72,30 @@ public class Card {
     }
 
 
+    public void saveRelations(DAODeck daoDeck, DAOTag daoTag) throws Exception {
+        AtomicReference<Exception> exception = null;
+        if(this.tags != null) {
+            this.tags.forEach((tag) -> {
+                try {
+                    tag = daoTag.find(tag.getId());
+                    tag.addCard(this);
+                    daoTag.edit(tag);
+                } catch (SQLException | ClassNotFoundException | JAXBException e) {
+                    exception.set(e);
+                }
+            });
+        }
+        if(this.decks != null) {
+            this.decks.forEach((deck) -> {
+                try {
+                    deck = daoDeck.find(deck.getId());
+                    deck.addCard(this);
+                    daoDeck.edit(deck);
+                } catch (SQLException | ClassNotFoundException | JAXBException e) {
+                    exception.set(e);
+                }
+            });
+        }
+        if(exception != null) throw exception.get();
+    }
 }

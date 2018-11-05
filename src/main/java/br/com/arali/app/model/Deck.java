@@ -3,6 +3,7 @@ package br.com.arali.app.model;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "decks")
@@ -12,11 +13,11 @@ public class Deck {
     private Long id;
     private String label;
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @Transient
+    @JoinTable(name = "decks_cards", joinColumns = @JoinColumn(name = "deck_fk", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "card_fk", referencedColumnName = "id"))
     private List<Card> cards;
 
-    public Deck(){
-        cards = new ArrayList<>();
+    public Long getId() {
+        return this.id;
     }
 
     public void addCard(Card card) {
