@@ -90,6 +90,7 @@ public class Study {
         return (int) Math.floor((nextRepetition - currentDate) / (24 * 60 * 60 * 1000));
     }
 
+    private boolean completed;
     private Student student;
     private Card card;
     private Date currentDate;
@@ -98,4 +99,5 @@ public class Study {
     private Date nextRepetition;
     private Integer timeForResolution;
     private Integer numberOfRepetitions;
+    private Tag tag;
 }
