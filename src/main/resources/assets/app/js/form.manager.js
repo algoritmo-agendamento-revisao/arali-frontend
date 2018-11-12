@@ -26,6 +26,8 @@ var FormManager  = function($, form, modal, resourceManager, afterSubmit){
         return false;
     });
 
+
+
     btnSave.click(function(){
         form.submit();
         modal.modal('hide');

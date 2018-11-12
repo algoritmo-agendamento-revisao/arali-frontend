@@ -27,9 +27,9 @@ public class Card {
     @ManyToMany(mappedBy = "cards")
     @Transient
     private List<Deck> decks;
-    @ManyToMany(mappedBy = "cards")
-    @Transient
-    private List<Tag> tags;
+    @ManyToOne
+    @JoinColumn(name = "tag_fk")
+    private Tag tag;
     @OneToMany
     @JoinColumn(name = "card_fk")
     @Transient
@@ -72,19 +72,8 @@ public class Card {
     }
 
 
-    public void saveRelations(DAODeck daoDeck, DAOTag daoTag) throws Exception {
+    public void saveRelations(DAODeck daoDeck) throws Exception {
         AtomicReference<Exception> exception = null;
-        if(this.tags != null) {
-            this.tags.forEach((tag) -> {
-                try {
-                    tag = daoTag.find(tag.getId());
-                    tag.addCard(this);
-                    daoTag.edit(tag);
-                } catch (SQLException | ClassNotFoundException | JAXBException e) {
-                    exception.set(e);
-                }
-            });
-        }
         if(this.decks != null) {
             this.decks.forEach((deck) -> {
                 try {

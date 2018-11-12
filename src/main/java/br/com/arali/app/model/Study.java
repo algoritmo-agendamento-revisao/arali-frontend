@@ -1,9 +1,39 @@
 package br.com.arali.app.model;
 
+import javax.persistence.*;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
+@Table(name = "studies")
+@Entity(name = "studies")
 public class Study {
+    @Id
+    @GeneratedValue
+    private Long id;
+    private boolean completed;
+    @ManyToOne
+    @JoinColumn(name = "student_fk")
+    private Student student;
+    @ManyToOne
+    @JoinColumn(name = "card_fk")
+    private Card card;
+    private Date currentDate;
+    private boolean isRight;
+    private Date lastRepetition;
+    private Date nextRepetition;
+    private Integer timeForResolution;
+    private Integer numberOfRepetitions;
+
+    public static Date getDateOfLastStudy(List<Study> st) {
+        Date date = null;
+        for(Study study : st){
+            if(date == null || study.getCurrentDate().getTime() < date.getTime()){
+                date = study.getCurrentDate();
+            }
+        }
+        return date;
+    }
 
     public Student getStudent() {
         return student;
@@ -90,14 +120,8 @@ public class Study {
         return (int) Math.floor((nextRepetition - currentDate) / (24 * 60 * 60 * 1000));
     }
 
-    private boolean completed;
-    private Student student;
-    private Card card;
-    private Date currentDate;
-    private boolean isRight;
-    private Date lastRepetition;
-    private Date nextRepetition;
-    private Integer timeForResolution;
-    private Integer numberOfRepetitions;
-    private Tag tag;
+
+    public void setId(Long aLong) {
+        this.id = aLong;
+    }
 }

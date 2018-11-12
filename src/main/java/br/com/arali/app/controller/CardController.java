@@ -26,6 +26,10 @@ public class CardController extends DefaultController {
         Spark.get("/card", (req, res) -> {
             return new ModelAndView(new HashMap(), "src/main/resources/template/card.html");
         }, new MustacheTemplateEngine());
+
+        Spark.get("/card/create", (req, res) -> {
+            return new ModelAndView(new HashMap(), "src/main/resources/template/card_create.html");
+        }, new MustacheTemplateEngine());
     }
 
     @Override
@@ -39,7 +43,7 @@ public class CardController extends DefaultController {
         try {
             card = daoCard.insert(card);
             card.saveOptions(new DAOOption());
-            card.saveRelations(daoDeck, daoTag);
+            card.saveRelations(daoDeck);
             res.status(202);
         } catch (SQLException | ClassNotFoundException | JAXBException e) {
             e.printStackTrace();

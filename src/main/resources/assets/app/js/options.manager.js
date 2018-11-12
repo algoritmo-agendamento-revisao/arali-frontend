@@ -38,7 +38,6 @@ var OptionsManager = function($, modal, table, list, callback){
             selectedOptions = selectedOptions.filter(function(value){
                 return value != selectedOptions[index];
             });
-            console.log(selectedOptions);
             update();
             return false;
         });

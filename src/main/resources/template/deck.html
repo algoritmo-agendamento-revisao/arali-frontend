@@ -126,7 +126,7 @@
             });
         }
         var updateTable  = function(tableManager){
-            resourceManager.findAll(null, function(decks){
+            resourceManager.findAllCustom({ 'not': 'cards' }, null, function(decks){
                 tableManager.clean();
                 decks = JSON.parse(decks);
                 if(Array.isArray(decks)){

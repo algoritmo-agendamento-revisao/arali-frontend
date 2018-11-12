@@ -1,9 +1,9 @@
 package br.com.arali.app.controller;
 
-import br.com.arali.app.model.Deck;
-import br.com.arali.app.model.Tag;
+import br.com.arali.app.model.*;
 import br.com.arali.app.model.dao.DAOCard;
 import br.com.arali.app.model.dao.DAODeck;
+import br.com.arali.app.model.dao.DAOStudy;
 import br.com.arali.app.model.dao.DAOTag;
 import br.com.arali.app.util.Controller;
 import br.com.arali.app.util.DAO;
@@ -17,6 +17,7 @@ import spark.template.mustache.MustacheTemplateEngine;
 
 import javax.xml.bind.JAXBException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -27,6 +28,31 @@ public class DeckController extends DefaultController {
         Spark.get("/deck", (req, res) -> {
             return new ModelAndView(new HashMap(), "src/main/resources/template/deck.html");
         }, new MustacheTemplateEngine());
+
+        Spark.get("/decks/not/:params", (req, res) -> {
+            String params     = req.params("params");
+            List<Deck> decks  = null;
+            DAODeck dao       = new DAODeck();
+            DAOStudy daoStudy = new DAOStudy();
+            List<DeckList> list = new ArrayList<>();
+            try {
+                if(params.equals("cards")) {
+                    decks = dao.findAllWithoutCards();
+                    Student student = new Student();
+                    student.setId(1l);
+                    for(Deck deck : decks) {
+                        DeckList dl    = new DeckList();
+                        List<Study> st = daoStudy.findAllByStudentAndDeck(student, deck);
+                        dl.setQtyStudiedCards(st.size());
+                        dl.setDateOfLastStudy(Study.getDateOfLastStudy(st));
+                        list.add(dl);
+                    }
+                }
+            } catch (SQLException | ClassNotFoundException | JAXBException e) {
+                e.printStackTrace();
+            }
+            return new Gson().toJson(list);
+        });
     }
 
     @Override

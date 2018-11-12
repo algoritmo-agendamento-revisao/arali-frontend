@@ -11,8 +11,8 @@ public class Tag {
     @GeneratedValue
     private Long id;
     private String label;
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "tags_cards", joinColumns = @JoinColumn(name = "tag_fk", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "card_fk", referencedColumnName = "id"))
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @Transient
     private List<Card> cards;
 
     public Tag(){

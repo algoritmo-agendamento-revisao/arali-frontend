@@ -5,7 +5,7 @@ var DecksManager = function($, modal, table, resourceManager, callback){
     var btnSave       = modal.find('button[name=save]');
     var self          = this;
 
-    resourceManager.findAll(null, function(decks){
+    resourceManager.findAllCustom({ 'not': 'cards' },null, function(decks){
         decks          = JSON.parse(decks);
         var select     = modal.find('select[name=deck]');
         if(Array.isArray(decks)){

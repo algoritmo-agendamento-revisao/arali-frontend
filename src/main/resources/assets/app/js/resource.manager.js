@@ -18,6 +18,15 @@ var ResourceManager = function($, resourceName){
         });
     }
 
+    this.findAllCustom = function(params, before, after){
+        $.ajax({
+            url: resourceName + '/not/' + params['not'],
+            method: 'get',
+            beforeSend: before,
+            success: after
+        });
+    }
+
     this.find = function(id, before, after){
         $.ajax({
             url: resourceName + "/" + id,

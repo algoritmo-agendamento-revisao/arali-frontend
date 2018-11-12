@@ -5,9 +5,13 @@ import br.com.arali.app.model.Deck;
 import br.com.arali.app.util.DAO;
 import br.com.arali.app.util.EntityFactory;
 import org.hibernate.Session;
+
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.xml.bind.JAXBException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DAODeck implements DAO<Deck> {
@@ -50,6 +54,22 @@ public class DAODeck implements DAO<Deck> {
         Session session  = (Session) EntityFactory.getInstance().createEntityManager().getDelegate();
         List<Deck> decks = session.createCriteria(Deck.class).list();
         session.close();
+        EntityFactory.close();
+        return decks;
+    }
+
+    public List<Deck> findAllWithoutCards() throws SQLException, ClassNotFoundException, JAXBException {
+        EntityManager em      = EntityFactory.getInstance().createEntityManager();
+        Query query           = em.createQuery("select id, label from decks");
+        List<Object[]> result = query.getResultList();
+        List<Deck> decks      = new ArrayList<>();
+        for (Object[] row : result) {
+            Deck deck = new Deck();
+            deck.setId((Long) row[0]);
+            deck.setLabel(row[1].toString());
+            decks.add(deck);
+        }
+        em.close();
         return decks;
     }
 
