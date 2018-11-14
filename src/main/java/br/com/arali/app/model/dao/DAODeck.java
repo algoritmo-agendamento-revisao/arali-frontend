@@ -2,9 +2,11 @@ package br.com.arali.app.model.dao;
 
 import br.com.arali.app.model.Card;
 import br.com.arali.app.model.Deck;
+import br.com.arali.app.model.Study;
 import br.com.arali.app.util.DAO;
 import br.com.arali.app.util.EntityFactory;
 import org.hibernate.Session;
+import org.hibernate.query.NativeQuery;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -84,5 +86,29 @@ public class DAODeck implements DAO<Deck> {
         em.close();
         EntityFactory.close();
         return !result;
+    }
+
+    public Integer getQtyCards(Integer id) {
+        Session session  = (Session) EntityFactory.getInstance().createEntityManager().getDelegate();
+        Query query = session.createNativeQuery("SELECT c.* from decks d " +
+                "                INNER JOIN decks_cards dc ON d.id = dc.deck_fk " +
+                "                INNER JOIN studies s ON dc.card_fk = s.card_fk  " +
+                "                INNER JOIN cards c ON c.id = dc.card_fk  " +
+                "                WHERE dc.deck_fk = :deck GROUP BY dc.card_fk", Card.class);
+        query.setParameter("deck", id);
+        List<Card> result = query.getResultList();
+        return result.size();
+    }
+
+    public Integer getQtyOfStudiedCards(Integer id) {
+        Session session  = (Session) EntityFactory.getInstance().createEntityManager().getDelegate();
+        NativeQuery query = session.createNativeQuery(" SELECT st.* FROM decks d\n" +
+                "                INNER JOIN decks_cards dc ON dc.deck_fk = d.id\n" +
+                "                INNER JOIN studies st ON st.card_fk = dc.card_fk\n" +
+                "                WHERE dc.deck_fk = :deck AND (datediff(st.nextRepetition, now()) <= 0 OR st.nextRepetition is null) " +
+                "                GROUP BY dc.card_fk", Study.class);
+        query.setParameter("deck", id);
+        List<Study> result = query.getResultList();
+        return result.size();
     }
 }

@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-@Entity
+@Entity(name = "cards")
 @Table(name="cards")
 public class Card {
     @Id
@@ -31,9 +31,9 @@ public class Card {
     @JoinColumn(name = "tag_fk")
     private Tag tag;
     @OneToMany
-    @JoinColumn(name = "card_fk")
     @Transient
     private List<Option> options;
+    private String info;
 
     public Long getId() {
         return id;
@@ -86,5 +86,9 @@ public class Card {
             });
         }
         if(exception != null) throw exception.get();
+    }
+
+    public void setOptions(List<Option> all) {
+        this.options = all;
     }
 }

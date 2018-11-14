@@ -14,7 +14,6 @@ public class Deck {
     protected String label;
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "decks_cards", joinColumns = @JoinColumn(name = "deck_fk", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "card_fk", referencedColumnName = "id"))
-    @Transient
     protected List<Card> cards;
 
     public Deck(){

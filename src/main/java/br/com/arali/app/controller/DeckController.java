@@ -33,25 +33,14 @@ public class DeckController extends DefaultController {
             String params     = req.params("params");
             List<Deck> decks  = null;
             DAODeck dao       = new DAODeck();
-            DAOStudy daoStudy = new DAOStudy();
-            List<DeckList> list = new ArrayList<>();
             try {
                 if(params.equals("cards")) {
                     decks = dao.findAllWithoutCards();
-                    Student student = new Student();
-                    student.setId(1l);
-                    for(Deck deck : decks) {
-                        DeckList dl    = new DeckList();
-                        List<Study> st = daoStudy.findAllByStudentAndDeck(student, deck);
-                        dl.setQtyStudiedCards(st.size());
-                        dl.setDateOfLastStudy(Study.getDateOfLastStudy(st));
-                        list.add(dl);
-                    }
                 }
             } catch (SQLException | ClassNotFoundException | JAXBException e) {
                 e.printStackTrace();
             }
-            return new Gson().toJson(list);
+            return new Gson().toJson(decks);
         });
     }
 

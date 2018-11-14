@@ -20,6 +20,11 @@ var Card = function($){
         this.lastStudy = value;
         return this;
     }
+
+    this.setId = function(id){
+        this.id = id;
+        return this;
+    }
     
     this.render = function(block){
         var card  = createDiv();
@@ -34,7 +39,7 @@ var Card = function($){
         btn.addClass('btn');
         btn.addClass('btn-primary');
         btn.text('Estudar');
-        btn.attr('href', '#');
+        btn.attr('href', 'study/' + this.id);
         card.append(body);
         body.append(title);
         body.append(text);
@@ -63,11 +68,13 @@ $(function(){
         if(Array.isArray(decks)){
             decks.forEach(deck => {
                 var card = new Card($);
-                card.setLabel(deck.label);
-                card.setLastStudy("312312q31");
-                card.setQtyStudiedCards('30');
-                card.setTotalCards("9999");
-                card.render(cardGroup);
+                card
+                    .setLabel(deck.label)
+                    .setLastStudy("312312q31")
+                    .setQtyStudiedCards('30')
+                    .setTotalCards("9999")
+                    .setId(deck.id)
+                    .render(cardGroup);
             });
         }
     }

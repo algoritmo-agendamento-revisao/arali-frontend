@@ -11,7 +11,7 @@ public class Router {
 
     public static void load(){
         try {
-            port(8080);
+            port(8090);
             staticFiles.externalLocation("src/main/resources/assets");
             Router.loadRoutes();
         } catch (Exception e) {

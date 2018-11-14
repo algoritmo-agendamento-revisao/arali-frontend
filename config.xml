@@ -5,7 +5,7 @@
     <persistence-unit name="arali" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <properties>
-            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect" />
+            <!--<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect" />-->
             <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
             <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/arali?serverTimezone=UTC" />
             <property name="javax.persistence.jdbc.user" value="root" />
@@ -18,7 +18,7 @@
             <property name="javax.persistence.schema-generation.database.action" value="create"/>
             <property name="hibernate.show_sql" value="false"/>
             <property name="hibernate.archive.autodetection" value="class, hbm"/>
-
+            <property name="dialect" value="org.hibernate.dialect.HSQLDialect" />
 
 
         </properties>

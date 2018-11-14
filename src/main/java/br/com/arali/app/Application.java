@@ -4,6 +4,7 @@ import br.com.arali.app.model.AIResponse;
 import br.com.arali.app.model.Card;
 import br.com.arali.app.model.Study;
 import br.com.arali.app.model.Deck;
+import br.com.arali.app.model.dao.DAOCard;
 import br.com.arali.app.model.dao.DAODeck;
 import br.com.arali.app.util.Router;
 import com.google.gson.Gson;
@@ -22,9 +23,25 @@ public class Application {
             return new ModelAndView(null, "src/main/resources/template/index.html");
         }, new MustacheTemplateEngine());
 
+        Spark.get("/study/deck/:id", (req, resp) -> {
+            Integer id         = Integer.parseInt(req.params("id"));
+            DAOCard daoCard    = new DAOCard();
+            Card  card         = daoCard.findByDeckAndNotStudied(id);
+            return new Gson().toJson(card);
+        });
 
-        Spark.get("/study", (req, resp) -> {
-            return new ModelAndView(new HashMap(), "src/main/resources/template/study.html");
+        Spark.get("/study/:id", (req, resp) -> {
+            HashMap data       = new HashMap();
+            DAODeck daoDeck    = new DAODeck();
+            Integer id         = Integer.parseInt(req.params("id"));
+            Integer total      = daoDeck.getQtyCards(id);
+            Integer qtyStudied = daoDeck.getQtyOfStudiedCards(id);
+            total              = (total == 0) ? 1 : total;
+            data.put("total", total);
+            data.put("qtyStudied", qtyStudied);
+            data.put("percentProgress", Math.floor(qtyStudied/total));
+            data.put("deck_id", id);
+            return new ModelAndView(data, "src/main/resources/template/study.html");
         }, new MustacheTemplateEngine());
 
 
