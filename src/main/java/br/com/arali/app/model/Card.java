@@ -58,16 +58,15 @@ public class Card {
         this.options.forEach((option) -> {
             try {
                 option.setCardId(this.id);
-                if(this.optionCorrect.getValue().equals(option.getValue())) {
-                    option.setId(this.optionCorrect.getId());
-                    dao.edit(option);
-                }else {
+                if(!this.optionCorrect.getValue().equals(option.getValue())) {
                     option = (Option) dao.insert(option);
                 }
             } catch (SQLException | ClassNotFoundException | JAXBException e) {
                 exception.set(e);
             }
         });
+        this.optionCorrect.setCardId(this.id);
+        dao.edit(this.optionCorrect);
         if(exception != null) throw exception.get();
     }
 

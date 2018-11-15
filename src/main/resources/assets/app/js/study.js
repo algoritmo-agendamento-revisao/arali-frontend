@@ -5,6 +5,7 @@ var Study = function($, container, modal, deck_id){
         var optionViewSelected = null;
         var optionViewCorrect  = null;
         var isAnswered         = false;
+        var start              = new Date();
 
         var box    = $(document.createElement('div'));
         var body   = $(document.createElement('div'));
@@ -17,6 +18,7 @@ var Study = function($, container, modal, deck_id){
         title.addClass('card-title');
         btn.addClass('btn');
         btn.addClass('btn-primary');
+        btn.addClass('to-right')
         footer.addClass('card-footer');
         box.append(body);
         body.append(title);
@@ -35,22 +37,62 @@ var Study = function($, container, modal, deck_id){
             optionView.append(icon);
         }
 
+        this.changeBtnToNext = function(){
+            btn.addClass('btn-success');
+            btn.removeClass('btn-primary');
+            this.setBtnTitle('Próximo >');
+        }
+
         var isSelectedCorrectOption = function(card, option){
             return card.optionCorrect.id === option.id;
         }
 
+        var saveStudy = function(card, timeForResolution, isRight, before, after){
+            var data = {
+               card,
+               timeForResolution,
+               isRight
+            };
+            $.ajax({
+                url: '/studies',
+                data: JSON.stringify(data),
+                method: 'post',
+                before: before,
+                success: after
+            });
+        }
+
+        var getTimeForResolution = function(){
+            return Math.abs(start.getTime() - new Date().getTime());
+        }
+
         this.loadBtnEvent = function(card){
+            var self = this;
+            var next = false;
             btn.click(function(){
-                if(isSelectedCorrectOption(card, selectedOption)){
-                    $(optionViewSelected).addClass('alert-success');
-                    $(optionViewSelected).removeClass('active');
+                var isRight = null;
+                if(!isAnswered){
+                    if(isSelectedCorrectOption(card, selectedOption)){
+                        $(optionViewSelected).addClass('alert-success');
+                        $(optionViewSelected).removeClass('active');
+                        isRight = true;
+                    }else{
+                        $(optionViewSelected).addClass('alert-danger');
+                        $(optionViewCorrect).addClass('alert-success');
+                        $(optionViewSelected).removeClass('active');
+                        isRight = false;
+                    }
+                    isAnswered = true;
+                    addInfo(optionViewCorrect, card.info);
+                    saveStudy(card, getTimeForResolution(), isRight, null, function(){
+                        self.changeBtnToNext();
+                        next = true;
+                    });
                 }else{
-                    $(optionViewSelected).addClass('alert-danger');
-                    $(optionViewCorrect).addClass('alert-success');
-                    $(optionViewSelected).removeClass('active');
+                    if(next){
+                        $(location).attr('href', '');
+                    }
                 }
-                isAnswered = true;
-                addInfo(optionViewCorrect, card.info);
             });
         }
 
@@ -101,12 +143,16 @@ var Study = function($, container, modal, deck_id){
     this.load = function(){
         var callback = null;
         getCard(deck_id, null, function(card){
-            if(card != null){
+            if(card !== null){
                 card = JSON.parse(card);
-                cardView = new Card(container);
-                cardView.setTitle(card.question);
-                cardView.loadBtnEvent(card);
-                callback(card);
+                if(card.hasOwnProperty('id')){
+                    cardView = new Card(container);
+                    cardView.setTitle(card.question);
+                    cardView.loadBtnEvent(card);
+                    callback(card);
+                }else{
+                    $('.card.notification').show();
+                }
             }
         });
 

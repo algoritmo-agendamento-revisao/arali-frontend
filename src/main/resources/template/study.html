@@ -51,10 +51,27 @@
             margin: auto 0;
             min-height: 25px;
         }
+        .to-right{
+            float: right;
+        }
+        .card.notification{
+            display: none;
+        }
     </style>
 </head>
 <body>
 <div class="container card-container">
+
+    <div class="card notification">
+        <div class="card-body">
+            <h5 class="card-title">Todos os cards já foram estudados</h5>
+
+        </div>
+        <div class="card-footer">
+            <a href="#" class="btn btn-danger" onclick="window.history.back();">Voltar</a>
+        </div>
+    </div>
+
     <input type="hidden" value="{{ deck_id }}" name="deck_id" />
     <div class="progress-box">
         <div>

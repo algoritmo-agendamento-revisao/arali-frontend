@@ -2,6 +2,7 @@ package br.com.arali.app.model;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -15,6 +16,12 @@ public class Deck {
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "decks_cards", joinColumns = @JoinColumn(name = "deck_fk", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "card_fk", referencedColumnName = "id"))
     protected List<Card> cards;
+    @Transient
+    private Integer totalCards;
+    @Transient
+    private Integer qtyStudiedCards;
+    @Transient
+    private Date lastStudy;
 
     public Deck(){
         this.cards = new ArrayList<>();
@@ -42,5 +49,17 @@ public class Deck {
 
     public String getLabel() {
         return this.label;
+    }
+
+    public void setTotal(Integer total) {
+        this.totalCards = total;
+    }
+
+    public void setQtyStudied(Integer qtyStudied) {
+        this.qtyStudiedCards = qtyStudied;
+    }
+
+    public void setLastStudy(Date lastStudy) {
+        this.lastStudy = lastStudy;
     }
 }

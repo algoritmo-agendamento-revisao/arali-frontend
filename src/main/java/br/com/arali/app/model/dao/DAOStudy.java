@@ -6,12 +6,14 @@ import br.com.arali.app.model.Study;
 import br.com.arali.app.util.DAO;
 import br.com.arali.app.util.EntityFactory;
 import org.hibernate.Session;
+import org.hibernate.query.NativeQuery;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.xml.bind.JAXBException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class DAOStudy implements DAO<Study> {
@@ -108,5 +110,21 @@ public class DAOStudy implements DAO<Study> {
         em.close();
         EntityFactory.close();
         return result;
+    }
+
+    public Date getLastStudyByDeck(Deck deck) {
+        Session session  = (Session) EntityFactory.getInstance().createEntityManager().getDelegate();
+        NativeQuery query = session.createNativeQuery(" SELECT st.*, max(st.currentDate) as hidden FROM decks d\n" +
+                "                                INNER JOIN decks_cards dc ON dc.deck_fk = d.id\n" +
+                "                                INNER JOIN studies st ON st.card_fk = dc.card_fk\n" +
+                "                                WHERE dc.deck_fk = :deck  \n" +
+                "                                GROUP BY dc.deck_fk", Study.class);
+        query.setParameter("deck", deck.getId());
+        List<Study> result = query.getResultList();
+        Study study        = new Study();
+        if(result.size() > 0) {
+            study = result.get(0);
+        }
+        return study.getCurrentDate();
     }
 }

@@ -18,6 +18,7 @@ import spark.template.mustache.MustacheTemplateEngine;
 import javax.xml.bind.JAXBException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -33,9 +34,18 @@ public class DeckController extends DefaultController {
             String params     = req.params("params");
             List<Deck> decks  = null;
             DAODeck dao       = new DAODeck();
+            DAOStudy daoStudy = new DAOStudy();
             try {
                 if(params.equals("cards")) {
                     decks = dao.findAllWithoutCards();
+                    decks.forEach((deck) -> {
+                        Integer total      = dao.getQtyCards(deck.getId());
+                        Integer qtyStudied = dao.getQtyOfStudiedCards(deck.getId());
+                        Date lastStudy     = daoStudy.getLastStudyByDeck(deck);
+                        deck.setTotal(total);
+                        deck.setQtyStudied(qtyStudied);
+                        deck.setLastStudy(lastStudy);
+                    });
                 }
             } catch (SQLException | ClassNotFoundException | JAXBException e) {
                 e.printStackTrace();

@@ -58,6 +58,7 @@ var Card = function($){
 
 $ = jQuery;
 $(function(){
+    moment.locale('pt-BR');
     var cardGroup       = $(".card-group");
     var resourceManager = new ResourceManager($, "decks");
     var clearCardGroup  = function() { cardGroup.html(''); }
@@ -70,9 +71,11 @@ $(function(){
                 var card = new Card($);
                 card
                     .setLabel(deck.label)
-                    .setLastStudy("312312q31")
-                    .setQtyStudiedCards('30')
-                    .setTotalCards("9999")
+                    .setLastStudy(
+                        moment(deck.lastStudy).format('L')
+                    )
+                    .setQtyStudiedCards(deck.qtyStudiedCards)
+                    .setTotalCards(deck.totalCards)
                     .setId(deck.id)
                     .render(cardGroup);
             });
@@ -90,5 +93,7 @@ $(function(){
         container.append(spinner);
         cardGroup.append(container);
     }
-    resourceManager.findAll(beforeLoad, loadDecks);
+    var params    = new Array();
+    params['not'] = 'cards';
+    resourceManager.findAllCustom(params, beforeLoad, loadDecks);
 });

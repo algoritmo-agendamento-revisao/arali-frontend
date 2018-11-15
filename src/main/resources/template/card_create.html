@@ -194,7 +194,7 @@
         //-------------------
         var form            = $('form[name=cardRegister]');
         var formManager     = new FormManager($, form, cardResourceManager, null, function(){
-            $(location).attr('href', $(location).attr('href') + '/../');
+            $(location).attr('href', '/card');
         });
         formManager.setFCleanData(function(data){
             if(typeof data['tag'] !== Object){

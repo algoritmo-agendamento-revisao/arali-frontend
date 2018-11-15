@@ -88,11 +88,10 @@ public class DAODeck implements DAO<Deck> {
         return !result;
     }
 
-    public Integer getQtyCards(Integer id) {
+    public Integer getQtyCards(Long id) {
         Session session  = (Session) EntityFactory.getInstance().createEntityManager().getDelegate();
         Query query = session.createNativeQuery("SELECT c.* from decks d " +
                 "                INNER JOIN decks_cards dc ON d.id = dc.deck_fk " +
-                "                INNER JOIN studies s ON dc.card_fk = s.card_fk  " +
                 "                INNER JOIN cards c ON c.id = dc.card_fk  " +
                 "                WHERE dc.deck_fk = :deck GROUP BY dc.card_fk", Card.class);
         query.setParameter("deck", id);
@@ -100,12 +99,12 @@ public class DAODeck implements DAO<Deck> {
         return result.size();
     }
 
-    public Integer getQtyOfStudiedCards(Integer id) {
+    public Integer getQtyOfStudiedCards(Long id) {
         Session session  = (Session) EntityFactory.getInstance().createEntityManager().getDelegate();
         NativeQuery query = session.createNativeQuery(" SELECT st.* FROM decks d\n" +
                 "                INNER JOIN decks_cards dc ON dc.deck_fk = d.id\n" +
                 "                INNER JOIN studies st ON st.card_fk = dc.card_fk\n" +
-                "                WHERE dc.deck_fk = :deck AND (datediff(st.nextRepetition, now()) <= 0 OR st.nextRepetition is null) " +
+                "                WHERE dc.deck_fk = :deck AND datediff(st.nextRepetition, now()) > 0 " +
                 "                GROUP BY dc.card_fk", Study.class);
         query.setParameter("deck", id);
         List<Study> result = query.getResultList();
