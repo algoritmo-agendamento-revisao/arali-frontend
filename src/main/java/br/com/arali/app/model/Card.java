@@ -90,4 +90,8 @@ public class Card {
     public void setOptions(List<Option> all) {
         this.options = all;
     }
+
+    public List<Option> getOptions() {
+        return this.options;
+    }
 }

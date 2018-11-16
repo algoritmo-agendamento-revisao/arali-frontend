@@ -1,6 +1,7 @@
 package br.com.arali.app.controller;
 
 import br.com.arali.app.model.Card;
+import br.com.arali.app.model.Option;
 import br.com.arali.app.model.Study;
 import br.com.arali.app.model.dao.*;
 import br.com.arali.app.util.Controller;
@@ -16,17 +17,20 @@ import spark.template.mustache.MustacheTemplateEngine;
 import javax.xml.bind.JAXBException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 @Controller(resource = "studies")
 public class StudyController extends DefaultController {
 
     public StudyController(){
         Spark.get("/study/deck/:id", (req, resp) -> {
-            Integer id         = Integer.parseInt(req.params("id"));
-            DAOCard daoCard    = new DAOCard();
-            Card  card         = daoCard.findByDeckAndNotStudied(id);
+            Integer id           = Integer.parseInt(req.params("id"));
+            DAOCard daoCard      = new DAOCard();
+            Card  card           = daoCard.findByDeckAndNotStudied(id);
+            Collections.shuffle(card.getOptions());
             return new Gson().toJson((card != null) ? card : new Object());
         });
 
