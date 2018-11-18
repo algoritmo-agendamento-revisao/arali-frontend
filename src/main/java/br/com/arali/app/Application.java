@@ -22,16 +22,6 @@ public class Application {
         Spark.get("/", (req, resp) -> {
             return new ModelAndView(null, "src/main/resources/template/index.html");
         }, new MustacheTemplateEngine());
-
-        Spark.get("/export", (req, res) -> {
-            return new ModelAndView(null, "src/main/resources/template/export.html");
-        }, new MustacheTemplateEngine());
-
-        Spark.get("/import", (req, res) -> {
-            return new ModelAndView(null, "src/main/resources/template/import.html");
-        }, new MustacheTemplateEngine());
-
-
         /*
         Study study = new Study();
         study.setCard(new Card());
