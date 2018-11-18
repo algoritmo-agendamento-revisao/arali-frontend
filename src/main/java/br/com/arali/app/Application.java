@@ -23,7 +23,13 @@ public class Application {
             return new ModelAndView(null, "src/main/resources/template/index.html");
         }, new MustacheTemplateEngine());
 
+        Spark.get("/export", (req, res) -> {
+            return new ModelAndView(null, "src/main/resources/template/export.html");
+        }, new MustacheTemplateEngine());
 
+        Spark.get("/import", (req, res) -> {
+            return new ModelAndView(null, "src/main/resources/template/import.html");
+        }, new MustacheTemplateEngine());
 
 
         /*

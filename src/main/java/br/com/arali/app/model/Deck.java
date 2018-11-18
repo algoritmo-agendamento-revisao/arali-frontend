@@ -1,11 +1,16 @@
 package br.com.arali.app.model;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+@XmlRootElement
 @Entity(name = "decks")
 @Table(name = "decks")
 public class Deck {
@@ -15,6 +20,8 @@ public class Deck {
     protected String label;
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "decks_cards", joinColumns = @JoinColumn(name = "deck_fk", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "card_fk", referencedColumnName = "id"))
+    @XmlElementWrapper(name = "cards")
+    @XmlElement(name ="card")
     protected List<Card> cards;
     @Transient
     private Integer totalCards;
@@ -27,6 +34,8 @@ public class Deck {
         this.cards = new ArrayList<>();
     }
 
+
+    @XmlTransient
     public Long getId() {
         return this.id;
     }
@@ -61,5 +70,10 @@ public class Deck {
 
     public void setLastStudy(Date lastStudy) {
         this.lastStudy = lastStudy;
+    }
+
+    @XmlTransient
+    public void setCards(List<Card> objects) {
+        this.cards = objects;
     }
 }

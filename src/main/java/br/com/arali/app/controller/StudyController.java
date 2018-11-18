@@ -30,7 +30,9 @@ public class StudyController extends DefaultController {
             Integer id           = Integer.parseInt(req.params("id"));
             DAOCard daoCard      = new DAOCard();
             Card  card           = daoCard.findByDeckAndNotStudied(id);
-            Collections.shuffle(card.getOptions());
+            if(card != null && card.getOptions() != null && card.getOptions().size() > 0) {
+                Collections.shuffle(card.getOptions());
+            }
             return new Gson().toJson((card != null) ? card : new Object());
         });
 

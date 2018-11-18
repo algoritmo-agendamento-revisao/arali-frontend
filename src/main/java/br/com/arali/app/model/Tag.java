@@ -1,6 +1,8 @@
 package br.com.arali.app.model;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +25,22 @@ public class Tag {
         this.cards.add(card);
     }
 
+
+    @XmlTransient
     public Long getId() {
         return this.id;
     }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
 }

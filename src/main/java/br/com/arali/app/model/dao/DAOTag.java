@@ -1,68 +1,33 @@
 package br.com.arali.app.model.dao;
 
+import br.com.arali.app.model.Card;
 import br.com.arali.app.model.Deck;
 import br.com.arali.app.model.Tag;
 import br.com.arali.app.util.DAO;
 import br.com.arali.app.util.EntityFactory;
 import org.hibernate.Session;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.xml.bind.JAXBException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
-public class DAOTag implements DAO<Tag> {
-    @Override
-    public Tag insert(Tag obj) throws SQLException, ClassNotFoundException, JAXBException {
-        EntityManager em = EntityFactory.getInstance().createEntityManager();
-        em.getTransaction().begin();
-        em.persist(obj);
-        em.getTransaction().commit();
-        boolean result = em.getTransaction().getRollbackOnly();
-        if(result) em.getTransaction().rollback();
-        em.close();
-        EntityFactory.close();
-        return obj;
-    }
+public class DAOTag extends DAODefault<Tag> {
 
-    @Override
-    public boolean edit(Tag obj) throws SQLException, ClassNotFoundException, JAXBException {
-        EntityManager em = EntityFactory.getInstance().createEntityManager();
-        em.getTransaction().begin();
-        em.merge(obj);
-        em.getTransaction().commit();
-        boolean result = em.getTransaction().getRollbackOnly();
-        if(result) em.getTransaction().rollback();
-        em.close();
-        EntityFactory.close();
-        return !result;
-    }
-
-    @Override
-    public Tag find(Long id) throws SQLException, ClassNotFoundException, JAXBException {
-        EntityManager em = EntityFactory.getInstance().createEntityManager();
-        Tag tag = em.find(Tag.class, id);
-        em.close();
+    public Tag insert(Card card) throws JAXBException, SQLException, ClassNotFoundException {
+        Tag tag = this.findByLabel(card.getTag().getLabel());
+        if(tag == null){
+            tag = this.insert(card.getTag());
+        }
         return tag;
     }
 
-    @Override
-    public List<Tag> findAll() throws SQLException, ClassNotFoundException, JAXBException {
+    private Tag findByLabel(String label) {
         Session session  = (Session) EntityFactory.getInstance().createEntityManager().getDelegate();
-        List<Tag> tags = session.createCriteria(Tag.class).list();
-        session.close();
-        return tags;
-    }
-
-    @Override
-    public boolean delete(Long id) throws SQLException, ClassNotFoundException, JAXBException {
-        EntityManager em = EntityFactory.getInstance().createEntityManager();
-        em.getTransaction().begin();
-        em.remove(em.getReference(Tag.class, id));
-        em.getTransaction().commit();
-        boolean result = em.getTransaction().getRollbackOnly();
-        if(result) em.getTransaction().rollback();
-        em.close();
-        EntityFactory.close();
-        return !result;
+        Query query = session.createNativeQuery("SELECT * from tags where label = :label", Tag.class);
+        query.setParameter("label", label);
+        List<Tag> tags = query.getResultList();
+        return (tags.size() > 0) ? tags.get(0) : null;
     }
 }

@@ -16,62 +16,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class DAOStudy implements DAO<Study> {
-    @Override
-    public Study insert(Study obj) throws SQLException, ClassNotFoundException, JAXBException {
-        EntityManager em = EntityFactory.getInstance().createEntityManager();
-        em.getTransaction().begin();
-        em.persist(obj);
-        em.getTransaction().commit();
-        boolean result = em.getTransaction().getRollbackOnly();
-        if(result) em.getTransaction().rollback();
-        em.close();
-        EntityFactory.close();
-        return obj;
-    }
-
-    @Override
-    public boolean edit(Study obj) throws SQLException, ClassNotFoundException, JAXBException {
-        EntityManager em = EntityFactory.getInstance().createEntityManager();
-        em.getTransaction().begin();
-        em.merge(obj);
-        em.getTransaction().commit();
-        boolean result = em.getTransaction().getRollbackOnly();
-        if(result) em.getTransaction().rollback();
-        em.close();
-        EntityFactory.close();
-        return !result;
-    }
-
-    @Override
-    public Study find(Long id) throws SQLException, ClassNotFoundException, JAXBException {
-        EntityManager em = EntityFactory.getInstance().createEntityManager();
-        Study study = em.find(Study.class, id);
-        em.close();
-        return study;
-    }
-
-    @Override
-    public List<Study> findAll() throws SQLException, ClassNotFoundException, JAXBException {
-        Session session   = (Session) EntityFactory.getInstance().createEntityManager().getDelegate();
-        List<Study> study = session.createCriteria(Deck.class).list();
-        session.close();
-        EntityFactory.close();
-        return study;
-    }
-
-    @Override
-    public boolean delete(Long id) throws SQLException, ClassNotFoundException, JAXBException {
-        EntityManager em = EntityFactory.getInstance().createEntityManager();
-        em.getTransaction().begin();
-        em.remove(em.getReference(Deck.class, id));
-        em.getTransaction().commit();
-        boolean result = em.getTransaction().getRollbackOnly();
-        if(result) em.getTransaction().rollback();
-        em.close();
-        EntityFactory.close();
-        return !result;
-    }
+public class DAOStudy extends DAODefault<Study> {
 
     public List<Study> findAllByStudent(Student student){
         EntityManager em      = EntityFactory.getInstance().createEntityManager();
