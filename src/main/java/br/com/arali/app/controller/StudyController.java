@@ -1,8 +1,7 @@
 package br.com.arali.app.controller;
 
-import br.com.arali.app.model.Card;
-import br.com.arali.app.model.Option;
-import br.com.arali.app.model.Study;
+import br.com.arali.app.handler.StudyHandler;
+import br.com.arali.app.model.*;
 import br.com.arali.app.model.dao.*;
 import br.com.arali.app.util.Controller;
 import br.com.arali.app.util.DefaultController;
@@ -62,6 +61,16 @@ public class StudyController extends DefaultController {
         DAOStudy daoStudy = new DAOStudy();
         try {
             study = daoStudy.insert(study);
+            Student student = new Student();
+            student.setId(11l);
+            study.setStudent(student);
+            study.setLastRepetition(study.getCurrentDate());
+            study.setNumberOfRepetitions(1);
+
+            StudyHandler handler  = new StudyHandler();
+            AIResponse response = handler.learn(study);
+            System.out.println(response.toString());
+
         } catch (SQLException | ClassNotFoundException | JAXBException e) {
             e.printStackTrace();
             res.status(505);

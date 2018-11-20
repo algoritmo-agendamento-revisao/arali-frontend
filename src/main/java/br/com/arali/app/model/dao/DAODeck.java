@@ -48,9 +48,9 @@ public class DAODeck extends DAODefault<Deck> {
         Session session  = (Session) EntityFactory.getInstance().createEntityManager().getDelegate();
         NativeQuery query = session.createNativeQuery(" SELECT st.* FROM decks d\n" +
                 "                INNER JOIN decks_cards dc ON dc.deck_fk = d.id\n" +
-                "                INNER JOIN studies st ON st.card_fk = dc.card_fk\n" +
+                "                LEFT JOIN studies st ON st.card_fk = dc.card_fk\n" +
                 "                WHERE dc.deck_fk = :deck AND datediff(st.nextRepetition, now()) > 0 " +
-                "                GROUP BY dc.card_fk", Study.class);
+                "                GROUP BY dc.card_fk, st.id", Study.class);
         query.setParameter("deck", id);
         List<Study> result = query.getResultList();
         return result.size();

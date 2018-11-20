@@ -63,7 +63,7 @@ public class DAOStudy extends DAODefault<Study> {
                 "                                INNER JOIN decks_cards dc ON dc.deck_fk = d.id\n" +
                 "                                INNER JOIN studies st ON st.card_fk = dc.card_fk\n" +
                 "                                WHERE dc.deck_fk = :deck  \n" +
-                "                                GROUP BY dc.deck_fk", Study.class);
+                "                                GROUP BY dc.deck_fk, st.id", Study.class);
         query.setParameter("deck", deck.getId());
         List<Study> result = query.getResultList();
         Study study        = new Study();
