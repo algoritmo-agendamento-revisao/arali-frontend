@@ -87,6 +87,30 @@
                         <option default selected>Selecione...</option>
                     </select>
                 </div>
+
+                <div style="border: 1px solid #ccc; padding: 20px; border-radius: 4px; margin: 20px 0;">
+                    <h6>Multimídia</h6>
+                    <div class="form-group" style="margin-top: 10px;">
+                        <label>Tipo</label>
+                        <div class="btn-group btn-group-toggle" data-toggle="buttons" name="type"  style="display: flex;">
+                            <label class="btn btn-secondary active">
+                                <input type="radio" name="multimidia.type" id="option1" autocomplete="off" value="disabled" checked> Desativado
+                            </label>
+                            <label class="btn btn-secondary">
+                                <input type="radio" name="multimidia.type" id="option2" autocomplete="off" value="audio"> Áudio
+                            </label>
+                            <label class="btn btn-secondary">
+                                <input type="radio" name="multimidia.type" id="option3" autocomplete="off" value="image"> Imagem
+                            </label>
+                        </div>
+                    </div>
+                
+                    <div class="form-group" style="margin-top: 10px">
+                        <label for="multimidia-url">URL</label>
+                        <input id="multimidia-url" class="form-control" name="multimidia.value">
+                    </div>
+                </div>
+
                 <div style="border: 1px solid #ccc; padding: 20px; border-radius: 4px; margin: 20px 0;">
                     <h6>Opções</h6>
                     <table class="table table-bordered" id="addOptionTable">
@@ -218,7 +242,11 @@
         var decksManager        = new DecksManager($, modalDecks, deckTable, deckResourceManager, callbackDefault);
         var tagsManager         = new TagsManager($, tagList, tagResourceManager);
         //-------------------
-        formManager.setPrepData(optionsManager.getPrepData());
+        formManager.setPrepData(function(data){
+            data = optionsManager.getPrepData()(data);
+            console.log(data);
+            return data;
+        });
         //-------------------
     });
 

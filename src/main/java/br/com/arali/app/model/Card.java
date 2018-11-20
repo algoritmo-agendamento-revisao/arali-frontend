@@ -30,6 +30,8 @@ public class Card {
     @JoinColumn(name="option_correct_id", referencedColumnName = "id", nullable = true)
     private Option optionCorrect;
     @Transient
+    @OneToOne(optional=true, cascade=CascadeType.ALL)
+    @JoinColumn(name="multimedia_fk", referencedColumnName = "id", nullable = true)
     private Multimedia multimedia;
     @ManyToMany(mappedBy = "cards")
     @Transient

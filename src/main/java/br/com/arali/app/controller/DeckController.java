@@ -16,7 +16,6 @@ import spark.Request;
 import spark.Response;
 import spark.Spark;
 import spark.template.mustache.MustacheTemplateEngine;
-
 import javax.servlet.MultipartConfigElement;
 import javax.xml.bind.JAXBException;
 import java.io.File;
@@ -84,7 +83,7 @@ public class DeckController extends DefaultController {
             try {
                 File file = new File("import.xml");
                 req.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/temp"));
-                try (InputStream input = req.raw().getPart("fileUpload").getInputStream()) { // getPart needs to use same "name" as input field in form
+                try (InputStream input = req.raw().getPart("fileUpload").getInputStream()) {
                     FileUtils.copyInputStreamToFile(input, file);
                 }
                 XMLParser<Deck> parse = new XMLParser<Deck>(file);

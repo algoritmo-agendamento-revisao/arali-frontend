@@ -23,13 +23,6 @@ public class DAOStudy extends DAODefault<Study> {
         Query query           = em.createQuery("select st.* from study sy inner join student st on sy.student_fk = st.id where st.id = ?");
         query.setParameter(1, student.getId());
         List<Study> result    = query.getResultList();
-        /*
-        List<Study> studies   = new ArrayList<>();
-        for (Object[] row : result) {
-            Study study = new Study();
-            study.setId((Long) row[0]);
-            studies.add(study);
-         */
         em.close();
         EntityFactory.close();
         return result;
@@ -45,13 +38,6 @@ public class DAOStudy extends DAODefault<Study> {
         query.setParameter(1, student.getId());
         query.setParameter(2, deck.getId());
         List<Study> result    = query.getResultList();
-        /*
-        List<Study> studies   = new ArrayList<>();
-        for (Object[] row : result) {
-            Study study = new Study();
-            study.setId((Long) row[0]);
-            studies.add(study);
-         */
         em.close();
         EntityFactory.close();
         return result;
@@ -63,13 +49,15 @@ public class DAOStudy extends DAODefault<Study> {
                 "                                INNER JOIN decks_cards dc ON dc.deck_fk = d.id\n" +
                 "                                INNER JOIN studies st ON st.card_fk = dc.card_fk\n" +
                 "                                WHERE dc.deck_fk = :deck  \n" +
-                "                                GROUP BY dc.deck_fk", Study.class);
+                "                                GROUP BY dc.deck_fk, st.id", Study.class);
         query.setParameter("deck", deck.getId());
         List<Study> result = query.getResultList();
         Study study        = new Study();
         if(result.size() > 0) {
             study = result.get(0);
         }
+        session.close();
+        EntityFactory.close();
         return study.getCurrentDate();
     }
 }

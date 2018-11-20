@@ -47,6 +47,32 @@ var Study = function($, container, modal, deck_id){
             return card.optionCorrect.id === option.id;
         }
 
+        var getImageElement = function(url){
+            var image = $(document.createElement('img'));
+            img.attr('src', url);
+            return image;
+        }
+        var getAudioElement = function(url){
+            var audio  = $(document.createElement('audio'));
+            var source = $(document.createElement('source'));
+            source.attr('type', 'audio/mpeg');
+            audio.attr('src', url);
+            audio.append(source);
+            return audio;
+        }
+        var addMultimidia = function(multimidia){
+            var element   = null;
+            switch(multimidia.type){
+                case 'audio':
+                    element = getAudioElement();
+                break;
+                case 'image':
+                    element = getImageElement();
+                break;
+            }
+            body.append(element);
+        }
+
         var saveStudy = function(card, timeForResolution, isRight, before, after){
             var data = {
                card,
@@ -148,6 +174,9 @@ var Study = function($, container, modal, deck_id){
                 if(card.hasOwnProperty('id')){
                     cardView = new Card(container);
                     cardView.setTitle(card.question);
+                    if(typeof card.multimidia !== 'undefined' && card.multimidia !== null){
+                        cardView.addMultimidia(card.multimidia);
+                    }
                     cardView.loadBtnEvent(card);
                     callback(card);
                 }else{

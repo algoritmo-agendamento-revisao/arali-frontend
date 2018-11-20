@@ -1,5 +1,78 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <deck>
-    <cards/>
+    <cards>
+        <card>
+            <tag>
+                <label>artigos</label>
+            </tag>
+            <options>
+                <option>
+                    <value>a one-man show; an university; a private investigator</value>
+                </option>
+                <option>
+                    <value>a watch; a pity; an orange</value>
+                </option>
+                <option>
+                    <value>an umbrella; a real effort; a year</value>
+                </option>
+                <option>
+                    <value>a small plane; an idea; a whale</value>
+                </option>
+            </options>
+            <difficulty>1.3</difficulty>
+            <info></info>
+            <optionCorrect>
+                <value>a one-man show; an university; a private investigator</value>
+            </optionCorrect>
+            <question>Assinale a alternativa que corresponde à seqüência na qual se inclui um uso inadequado do artigo em inglês:</question>
+        </card>
+        <card>
+            <tag>
+                <label>primeiro deck</label>
+            </tag>
+            <options>
+                <option>
+                    <value>a</value>
+                </option>
+                <option>
+                    <value>b</value>
+                </option>
+                <option>
+                    <value>c</value>
+                </option>
+            </options>
+            <difficulty>1.3</difficulty>
+            <info>adsadsa</info>
+            <optionCorrect>
+                <value>a</value>
+            </optionCorrect>
+            <question>Uma questão muito legal??</question>
+        </card>
+        <card>
+            <tag>
+                <label>adjetivos, superlativos</label>
+            </tag>
+            <options>
+                <option>
+                    <value>o menor</value>
+                </option>
+                <option>
+                    <value>o maior</value>
+                </option>
+                <option>
+                    <value>o pequeno</value>
+                </option>
+                <option>
+                    <value>o grande</value>
+                </option>
+            </options>
+            <difficulty>1.3</difficulty>
+            <info></info>
+            <optionCorrect>
+                <value>o menor</value>
+            </optionCorrect>
+            <question>Assinale a alternativa que corresponde à tradução mais adequada da forma adjetiva destacada a seguir: Literally thousands of parts are used to make up even the SMALLEST family saloon.</question>
+        </card>
+    </cards>
     <label>primeiro deck</label>
 </deck>

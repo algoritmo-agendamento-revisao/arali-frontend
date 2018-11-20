@@ -6,6 +6,7 @@ import br.com.arali.app.model.Study;
 import br.com.arali.app.util.DAO;
 import br.com.arali.app.util.EntityFactory;
 import org.hibernate.Session;
+import org.hibernate.bytecode.enhance.internal.bytebuddy.EnhancerImpl;
 import org.hibernate.query.NativeQuery;
 
 import javax.persistence.EntityManager;
@@ -30,6 +31,7 @@ public class DAODeck extends DAODefault<Deck> {
             decks.add(deck);
         }
         em.close();
+        EntityFactory.close();
         return decks;
     }
 
@@ -41,6 +43,8 @@ public class DAODeck extends DAODefault<Deck> {
                 "                WHERE dc.deck_fk = :deck GROUP BY dc.card_fk", Card.class);
         query.setParameter("deck", id);
         List<Card> result = query.getResultList();
+        session.close();
+        EntityFactory.close();
         return result.size();
     }
 
@@ -50,9 +54,11 @@ public class DAODeck extends DAODefault<Deck> {
                 "                INNER JOIN decks_cards dc ON dc.deck_fk = d.id\n" +
                 "                INNER JOIN studies st ON st.card_fk = dc.card_fk\n" +
                 "                WHERE dc.deck_fk = :deck AND datediff(st.nextRepetition, now()) > 0 " +
-                "                GROUP BY dc.card_fk", Study.class);
+                "                GROUP BY dc.card_fk, st.id", Study.class);
         query.setParameter("deck", id);
         List<Study> result = query.getResultList();
+        session.close();
+        EntityFactory.close();
         return result.size();
     }
 }

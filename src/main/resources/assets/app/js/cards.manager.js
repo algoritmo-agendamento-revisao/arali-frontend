@@ -1,6 +1,6 @@
 var CardManager = function($, table, resourceManager){
-    var tableManager  = new TableManager(table);
-    var self          = this;
+    var tableManager    = new TableManager(table);
+    var self            = this;
 
     resourceManager.findAll(null, function(cards){
         cards          = JSON.parse(cards);

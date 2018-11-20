@@ -44,16 +44,17 @@ public class DAODefault<E> implements DAO<E> {
         EntityManager em = EntityFactory.getInstance().createEntityManager();
         E obj = (E) em.find(getClassOfGeneric(), id);
         em.close();
+        EntityFactory.close();
         return obj;
     }
 
     @Override
     public List<E> findAll() throws SQLException, ClassNotFoundException, JAXBException {
-        System.out.println("teste");
         Class a = getClassOfGeneric();
         Session session = (Session) EntityFactory.getInstance().createEntityManager().getDelegate();
         List<E> objs    = session.createCriteria(getClassOfGeneric()).list();
         session.close();
+        EntityFactory.close();
         return objs;
     }
 

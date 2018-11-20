@@ -28,6 +28,8 @@ public class DAOTag extends DAODefault<Tag> {
         Query query = session.createNativeQuery("SELECT * from tags where label = :label", Tag.class);
         query.setParameter("label", label);
         List<Tag> tags = query.getResultList();
+        session.close();
+        EntityFactory.close();
         return (tags.size() > 0) ? tags.get(0) : null;
     }
 }
