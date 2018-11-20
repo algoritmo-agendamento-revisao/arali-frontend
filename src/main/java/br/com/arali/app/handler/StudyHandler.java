@@ -9,7 +9,7 @@ public class StudyHandler {
     private RestClient client;
 
     public StudyHandler(){
-        this.client = new RestClient("http://192.168.0.100:5000/estudo");
+        this.client = new RestClient("http://0.0.0.0:5000/estudo");
         this.client.setRestTemplate(new RestTemplate());
     }
 
