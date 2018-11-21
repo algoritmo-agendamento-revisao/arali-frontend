@@ -3,6 +3,7 @@ var FormManager  = function($, form, modal, resourceManager, afterSubmit){
     var prepData = null;
     var btnSave  = modal.find('button[name=save]');
     var input    = modal.find('input[name=label]');
+    var allPrepData = [];
 
     var toObject = function(dataArray){
         var obj = new Object();
@@ -10,6 +11,10 @@ var FormManager  = function($, form, modal, resourceManager, afterSubmit){
             obj[value.name] = value.value;
         });
         return obj;
+    }
+
+    this.addPrepData = function(prep){
+        allPrepData.push(prep);
     }
 
     this.setPrepData = function(prep){
@@ -22,6 +27,9 @@ var FormManager  = function($, form, modal, resourceManager, afterSubmit){
         if(prepData != null){
             data = prepData(data);
         }
+        allPrepData.forEach(function(func){
+            data = func(data);
+        });
         resourceManager.create(data, null, afterSubmit);
         return false;
     });

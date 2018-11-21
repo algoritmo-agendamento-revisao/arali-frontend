@@ -2,6 +2,8 @@ var FormManager  = function($, form, resourceManager, beforeSubmit, afterSubmit)
     var moreData = {};
     var prepData = null;
     var fCleanData = null;
+    var allPrepData = [];
+
 
     var toObject = function(dataArray){
         var obj = new Object();
@@ -21,6 +23,9 @@ var FormManager  = function($, form, resourceManager, beforeSubmit, afterSubmit)
         if(prepData != null){
             data = prepData(data);
         }
+        allPrepData.forEach(function(func){
+            data = func(data);
+        });
         resourceManager.create(data, beforeSubmit, afterSubmit);
         return false;
     });
@@ -40,6 +45,10 @@ var FormManager  = function($, form, resourceManager, beforeSubmit, afterSubmit)
         if(callback !== null){
             fCleanData = callback;
         }
+    }
+
+    this.addPrepData = function(prep){
+        allPrepData.push(prep);
     }
 
     var cleanData = function(data){

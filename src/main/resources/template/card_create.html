@@ -94,20 +94,20 @@
                         <label>Tipo</label>
                         <div class="btn-group btn-group-toggle" data-toggle="buttons" name="type"  style="display: flex;">
                             <label class="btn btn-secondary active">
-                                <input type="radio" name="multimidia.type" id="option1" autocomplete="off" value="disabled" checked> Desativado
+                                <input type="radio" name="multimedia_type" id="option1" autocomplete="off" value="disabled" checked> Desativado
                             </label>
                             <label class="btn btn-secondary">
-                                <input type="radio" name="multimidia.type" id="option2" autocomplete="off" value="audio"> Áudio
+                                <input type="radio" name="multimedia_type" id="option2" autocomplete="off" value="audio"> Áudio
                             </label>
                             <label class="btn btn-secondary">
-                                <input type="radio" name="multimidia.type" id="option3" autocomplete="off" value="image"> Imagem
+                                <input type="radio" name="multimedia_type" id="option3" autocomplete="off" value="image"> Imagem
                             </label>
                         </div>
                     </div>
                 
                     <div class="form-group" style="margin-top: 10px">
                         <label for="multimidia-url">URL</label>
-                        <input id="multimidia-url" class="form-control" name="multimidia.value">
+                        <input id="multimidia-url" class="form-control" name="multimedia_value">
                     </div>
                 </div>
 
@@ -242,9 +242,14 @@
         var decksManager        = new DecksManager($, modalDecks, deckTable, deckResourceManager, callbackDefault);
         var tagsManager         = new TagsManager($, tagList, tagResourceManager);
         //-------------------
-        formManager.setPrepData(function(data){
-            data = optionsManager.getPrepData()(data);
-            console.log(data);
+        formManager.addPrepData(optionsManager.getPrepData());
+        formManager.addPrepData(function(data){
+            if(data['multimedia_type'] !== 'disabled'){
+                data['multimedia'] = {
+                    'type': data['multimedia_type'],
+                    'src': data['multimedia_value']
+                }
+            }
             return data;
         });
         //-------------------

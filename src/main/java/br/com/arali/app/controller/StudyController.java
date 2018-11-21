@@ -60,16 +60,7 @@ public class StudyController extends DefaultController {
         DAOStudy daoStudy = new DAOStudy();
         try {
             study = daoStudy.insert(study);
-            Student student = new Student();
-            student.setId(11l);
-            study.setStudent(student);
-            study.setLastRepetition(study.getCurrentDate());
-            study.setNumberOfRepetitions(1);
-
-            StudyHandler handler  = new StudyHandler();
-            AIResponse response = handler.learn(study);
-            System.out.println(response.toString());
-
+            sendToAI(study);
         } catch (SQLException | ClassNotFoundException | JAXBException e) {
             e.printStackTrace();
             res.status(505);
@@ -98,6 +89,28 @@ public class StudyController extends DefaultController {
     @Override
     public Object findAll(Request req, Response res) {
         return null;
+    }
+
+    public Thread sendToAI(final Study study) {
+        Thread run = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Student student = new Student();
+                    student.setId(11l);
+                    study.setStudent(student);
+                    study.setLastRepetition(study.getCurrentDate());
+                    study.setNumberOfRepetitions(1);
+                    StudyHandler handler = new StudyHandler();
+                    AIResponse response = handler.learn(study);
+                    System.out.println(response.toString());
+                }catch (Exception e){
+                    System.out.println("Erro na comunicação com o CORE");
+                }
+            }
+        });
+        run.start();
+        return run;
     }
 
 }

@@ -74,18 +74,20 @@ var OptionsManager = function($, modal, table, list, callback){
     }
 
     this.getPrepData = function(){
-        return function(data){ 
-            if(Array.isArray(data.options) && typeof data.options[0] === 'string'){
-                data.optionCorrect = {
-                    value: data.options[data.optionCorrect]
-                };
-                data.options.forEach(function(value, index){
-                    data.options[index] = {
-                        value: value
+        return function(data){
+            if(data.options){
+                if(Array.isArray(data.options) && typeof data.options[0] === 'string'){
+                    data.optionCorrect = {
+                        value: data.options[data.optionCorrect]
                     };
-                });
-            }else{
-                data.optionCorrect = data.options[data.optionCorrect];
+                    data.options.forEach(function(value, index){
+                        data.options[index] = {
+                            value: value
+                        };
+                    });
+                }else{
+                    data.optionCorrect = data.options[data.optionCorrect];
+                }
             }
             return data;
         }

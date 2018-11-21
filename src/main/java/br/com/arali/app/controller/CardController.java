@@ -1,8 +1,6 @@
 package br.com.arali.app.controller;
-import br.com.arali.app.model.dao.DAOCard;
-import br.com.arali.app.model.dao.DAODeck;
-import br.com.arali.app.model.dao.DAOOption;
-import br.com.arali.app.model.dao.DAOTag;
+import br.com.arali.app.model.Multimedia;
+import br.com.arali.app.model.dao.*;
 import br.com.arali.app.util.Controller;
 import br.com.arali.app.util.DefaultController;
 import com.github.mirreck.FakeFactory;

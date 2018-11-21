@@ -57,6 +57,14 @@
         .card.notification{
             display: none;
         }
+        .multimedia{
+            max-height: 200px;
+            margin: 20px 0;
+            margin-top: 10px;
+        }
+        .multimedia img{
+            max-height: 200px;
+        }
     </style>
 </head>
 <body>
@@ -75,7 +83,7 @@
     <input type="hidden" value="{{ deck_id }}" name="deck_id" />
     <div class="progress-box">
         <div>
-            <h5>Estudo diário</h5>
+            <h5>Estudo do Deck</h5>
         </div>
         <div class="progress">
             <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" aria-valuenow="{{ percentProgress }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ percentProgress }}%">{{percentProgress}}%</div>

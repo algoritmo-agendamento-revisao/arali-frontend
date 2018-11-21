@@ -1,9 +1,6 @@
 package br.com.arali.app.model;
 
-import br.com.arali.app.model.dao.DAOCard;
-import br.com.arali.app.model.dao.DAODeck;
-import br.com.arali.app.model.dao.DAOOption;
-import br.com.arali.app.model.dao.DAOTag;
+import br.com.arali.app.model.dao.*;
 import br.com.arali.app.util.DAO;
 
 import javax.persistence.*;
@@ -29,7 +26,6 @@ public class Card {
     @OneToOne(optional=true, cascade=CascadeType.ALL)
     @JoinColumn(name="option_correct_id", referencedColumnName = "id", nullable = true)
     private Option optionCorrect;
-    @Transient
     @OneToOne(optional=true, cascade=CascadeType.ALL)
     @JoinColumn(name="multimedia_fk", referencedColumnName = "id", nullable = true)
     private Multimedia multimedia;

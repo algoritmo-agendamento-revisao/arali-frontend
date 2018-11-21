@@ -49,7 +49,7 @@ var Study = function($, container, modal, deck_id){
 
         var getImageElement = function(url){
             var image = $(document.createElement('img'));
-            img.attr('src', url);
+            image.attr('src', url);
             return image;
         }
         var getAudioElement = function(url){
@@ -60,17 +60,20 @@ var Study = function($, container, modal, deck_id){
             audio.append(source);
             return audio;
         }
-        var addMultimidia = function(multimidia){
-            var element   = null;
-            switch(multimidia.type){
+        this.addMultimedia = function(multimedia){
+            var element    = null;
+            var multDiv    = $(document.createElement('div'));
+            switch(multimedia.type){
                 case 'audio':
-                    element = getAudioElement();
+                    element = getAudioElement(multimedia.src);
                 break;
                 case 'image':
-                    element = getImageElement();
+                    element = getImageElement(multimedia.src);
                 break;
             }
-            body.append(element);
+            multDiv.addClass('multimedia');
+            multDiv.append(element);
+            body.append(multDiv);
         }
 
         var saveStudy = function(card, timeForResolution, isRight, before, after){
@@ -174,8 +177,8 @@ var Study = function($, container, modal, deck_id){
                 if(card.hasOwnProperty('id')){
                     cardView = new Card(container);
                     cardView.setTitle(card.question);
-                    if(typeof card.multimidia !== 'undefined' && card.multimidia !== null){
-                        cardView.addMultimidia(card.multimidia);
+                    if(typeof card.multimedia !== 'undefined' && card.multimedia !== null){
+                        cardView.addMultimedia(card.multimedia);
                     }
                     cardView.loadBtnEvent(card);
                     callback(card);

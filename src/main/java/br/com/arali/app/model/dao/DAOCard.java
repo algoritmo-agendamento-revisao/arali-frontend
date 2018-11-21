@@ -2,6 +2,7 @@ package br.com.arali.app.model.dao;
 
 import br.com.arali.app.model.Card;
 import br.com.arali.app.model.Deck;
+import br.com.arali.app.model.Multimedia;
 import br.com.arali.app.model.Option;
 import br.com.arali.app.util.DAO;
 import br.com.arali.app.util.EntityFactory;
@@ -17,7 +18,7 @@ import java.util.List;
 
 public class DAOCard extends DAODefault<Card> {
 
-    public Card findByDeckAndNotStudied(Integer id) {
+    public Card findByDeckAndNotStudied(Integer id) throws JAXBException, SQLException, ClassNotFoundException {
         Session session  = (Session) EntityFactory.getInstance().createEntityManager().getDelegate();
         NativeQuery query = session.createNativeQuery("SELECT c.* from cards c \n" +
                 "INNER JOIN decks_cards dc ON dc.card_fk = c.id \n" +
@@ -25,15 +26,13 @@ public class DAOCard extends DAODefault<Card> {
                 " WHERE dc.deck_fk = :deck AND (datediff(s.nextRepetition, now()) <= 0 OR s.nextRepetition is null)", Card.class);
         query.setParameter("deck", id);
         List<Card> list = query.getResultList();
-        session.close();
-
         //mistura os cards
         Collections.shuffle(list);
 
-        EntityFactory.close();
         Card card = null;
         if(list.size() > 0) {
             card = list.get(0);
+            card = this.find(card.getId());
             DAOOption dao = new DAOOption();
             card.setOptions(dao.findAll(card));
         }
@@ -44,6 +43,8 @@ public class DAOCard extends DAODefault<Card> {
         DAOOption daoOption = new DAOOption();
         DAOTag daoTag       = new DAOTag();
         DAODeck daoDeck     = new DAODeck();
+        DAODefault<Multimedia> daoMultimedia = new DAODefault<Multimedia>();
+
         for(Card card : deck.getCards()){
             card.setTag(daoTag.insert(card));
             card = this.insert(card);
