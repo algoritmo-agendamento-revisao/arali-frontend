@@ -1,5 +1,6 @@
 package br.com.arali.app.model.dao;
 
+import br.com.arali.app.model.Card;
 import br.com.arali.app.model.Deck;
 import br.com.arali.app.model.Student;
 import br.com.arali.app.model.Study;
@@ -59,5 +60,48 @@ public class DAOStudy extends DAODefault<Study> {
         session.close();
         EntityFactory.close();
         return study.getCurrentDate();
+    }
+
+    public Integer getQtyOfRepetitions(Study study) {
+        Session session  = (Session) EntityFactory.getInstance().createEntityManager().getDelegate();
+        NativeQuery query = session.createNativeQuery("SELECT count(distinct(st.id)) as qty FROM decks d\n" +
+                "  INNER JOIN decks_cards dc ON dc.deck_fk = d.id\n" +
+                "  INNER JOIN studies st ON st.card_fk = dc.card_fk\n" +
+                " WHERE \n" +
+                " dc.card_fk    = :card AND \n" +
+                " st.student_fk = :student \n" +
+                "GROUP BY dc.card_fk", Integer.class);
+        query.setParameter("card", study.getCard().getId());
+        query.setParameter("student", study.getStudent().getId());
+        List<Integer> result = query.getResultList();
+        session.close();
+        EntityFactory.close();
+        return (result.size() > 0) ? result.get(0) : 0;
+    }
+
+    public Date getDateOfLastStudy(Study study) {
+        Session session  = (Session) EntityFactory.getInstance().createEntityManager().getDelegate();
+        NativeQuery query = session.createNativeQuery("SELECT st.* FROM decks d\n" +
+                "  INNER JOIN decks_cards dc ON dc.deck_fk = d.id\n " +
+                "  INNER JOIN studies st ON st.card_fk = dc.card_fk\n " +
+                "WHERE \n" +
+                "\tdc.card_fk    = :card AND\n" +
+                "\tst.student_fk = :student \n" +
+                "GROUP BY st.id " +
+                "ORDER BY st.id DESC ", Study.class);
+        query.setParameter("card", study.getCard().getId());
+        query.setParameter("student", study.getStudent().getId());
+        List<Study> result = query.getResultList();
+        session.close();
+        EntityFactory.close();
+        return (result.size() > 0) ? result.get(0).getCurrentDate() : new Date();
+    }
+
+    public Study prepStudy(Study study) {
+        Integer qtyOfRepetitions = this.getQtyOfRepetitions(study);
+        Date lastRepetition      = this.getDateOfLastStudy(study);
+        study.setLastRepetition(lastRepetition);
+        study.setNumberOfRepetitions(qtyOfRepetitions);
+        return study;
     }
 }

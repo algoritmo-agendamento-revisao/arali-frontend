@@ -59,6 +59,9 @@ public class StudyController extends DefaultController {
         study.setNextRepetition(Util.sumDays(new Date(), 1));
         DAOStudy daoStudy = new DAOStudy();
         try {
+            Student student = new Student();
+            student.setId(11l);
+            study.setStudent(student);
             study = daoStudy.insert(study);
             sendToAI(study);
         } catch (SQLException | ClassNotFoundException | JAXBException e) {
@@ -96,14 +99,15 @@ public class StudyController extends DefaultController {
             @Override
             public void run() {
                 try {
-                    Student student = new Student();
-                    student.setId(11l);
-                    study.setStudent(student);
-                    study.setLastRepetition(study.getCurrentDate());
-                    study.setNumberOfRepetitions(1);
-                    StudyHandler handler = new StudyHandler();
+                    DAOStudy daoStudy        = new DAOStudy();
+                    DAOCard daoCard          = new DAOCard();
+                    StudyHandler handler     = new StudyHandler();
+                    daoStudy.prepStudy(study);
                     AIResponse response = handler.learn(study);
                     System.out.println(response.toString());
+                    study.setNextRepetition(response.getNextRepetition());
+                    daoStudy.edit(study);
+                    daoCard.updateCardByAIResponse(response);
                 }catch (Exception e){
                     System.out.println("Erro na comunicação com o CORE");
                 }
@@ -112,5 +116,9 @@ public class StudyController extends DefaultController {
         run.start();
         return run;
     }
+
+
+
+
 
 }

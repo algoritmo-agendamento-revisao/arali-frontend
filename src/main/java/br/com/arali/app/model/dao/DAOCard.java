@@ -1,9 +1,6 @@
 package br.com.arali.app.model.dao;
 
-import br.com.arali.app.model.Card;
-import br.com.arali.app.model.Deck;
-import br.com.arali.app.model.Multimedia;
-import br.com.arali.app.model.Option;
+import br.com.arali.app.model.*;
 import br.com.arali.app.util.DAO;
 import br.com.arali.app.util.EntityFactory;
 import org.hibernate.Session;
@@ -43,7 +40,6 @@ public class DAOCard extends DAODefault<Card> {
         DAOOption daoOption = new DAOOption();
         DAOTag daoTag       = new DAOTag();
         DAODeck daoDeck     = new DAODeck();
-        DAODefault<Multimedia> daoMultimedia = new DAODefault<Multimedia>();
 
         for(Card card : deck.getCards()){
             card.setTag(daoTag.insert(card));
@@ -58,5 +54,12 @@ public class DAOCard extends DAODefault<Card> {
             card.addDeck(deck);
             card.saveRelations(daoDeck);
         }
+    }
+
+    public void updateCardByAIResponse(AIResponse response) throws JAXBException, SQLException, ClassNotFoundException {
+        Card respCard = response.getCard();
+        Card card     = this.find(respCard.getId());
+        card.setDifficulty(respCard.getDifficulty());
+        this.edit(card);
     }
 }
