@@ -4,20 +4,37 @@ var DecksManager = function($, modal, table, resourceManager, callback){
     var allDecks      = [];
     var btnSave       = modal.find('button[name=save]');
     var self          = this;
+    var attempts      = 3;
 
-    resourceManager.findAllCustom({ 'not': 'cards' },null, function(decks){
-        decks          = JSON.parse(decks);
-        var select     = modal.find('select[name=deck]');
-        if(Array.isArray(decks)){
-            decks.forEach(function(deck){
-                var option = $(document.createElement('option'));
-                option.text(deck.label);
-                option.val(deck.id);
-                select.append(option);
-            });
-        }
-        allDecks = decks;
-    });
+    var getDecks = function(){
+        resourceManager.findAllCustom({ 'not': 'cards' },null, function(decks){
+            try{
+                decks          = JSON.parse(decks);
+                var select     = modal.find('select[name=deck]');
+                if(Array.isArray(decks)){
+                    decks.forEach(function(deck){
+                        var option = $(document.createElement('option'));
+                        option.text(deck.label);
+                        option.val(deck.id);
+                        select.append(option);
+                    });
+                }else{
+                    throw new Error('Request error!');
+                }
+            }catch(e){
+                if(attempts > 0 && decks.status >= 500){
+                     attempts--;
+                     setTimeout(getDecks, 1000);
+                }
+            }
+            allDecks = decks;
+        }, function(xhr){
+            if(attempts > 0 && xhr.status >= 500){
+                 attempts--;
+                 setTimeout(getDecks, 1000);
+            }
+        });
+    }
 
     var findDeck = function(id){
         var decks = allDecks.filter(function(deck) { return deck.id == id; });
@@ -66,4 +83,5 @@ var DecksManager = function($, modal, table, resourceManager, callback){
             value: selectedDecks
         };
     }
+    getDecks();
 }

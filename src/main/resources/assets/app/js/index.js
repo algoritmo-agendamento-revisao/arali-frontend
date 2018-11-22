@@ -59,15 +59,23 @@ var Card = function($){
 $ = jQuery;
 $(function(){
     moment.locale('pt-BR');
-    var cardGroup       = $(".card-group");
+    var cardBody        = $(".card-body");
     var resourceManager = new ResourceManager($, "decks");
-    var clearCardGroup  = function() { cardGroup.html(''); }
+    var clearBody  = function() { cardBody.html(''); }
     var loadDecks       = function(decks){
         setTimeout(null, 1000);
-        clearCardGroup();
+        clearBody();
         decks = JSON.parse(decks);
+        var cardGroup = $(document.createElement('div'));
+        cardGroup.addClass('card-group');
+        cardBody.append(cardGroup);
         if(Array.isArray(decks)){
-            decks.forEach(deck => {
+            decks.forEach(function(deck, index){
+                if(index%3 == 0){
+                    cardGroup = $(document.createElement('div'));
+                    cardGroup.addClass('card-group');
+                    cardBody.append(cardGroup);
+                }
                 var card = new Card($);
                 card
                     .setLabel(deck.label)
@@ -82,7 +90,7 @@ $(function(){
         }
     }
     var beforeLoad = function(){
-        clearCardGroup();
+        clearBody();
         var container = $(document.createElement('div')); 
         var spinner   = $(document.createElement('i'));
         spinner.addClass('fas fa-spinner fa-spinner-animated');
@@ -91,7 +99,7 @@ $(function(){
         container.css('align-items', 'center');
         container.css('width', '100%');
         container.append(spinner);
-        cardGroup.append(container);
+        cardBody.append(container);
     }
     var params    = new Array();
     params['not'] = 'cards';

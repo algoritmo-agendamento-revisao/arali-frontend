@@ -1,29 +1,32 @@
 var ResourceManager = function($, resourceName){
-    this.create = function(obj, before, after){
+    this.create = function(obj, before, after, complete){
         $.ajax({
             url: resourceName,
             data: JSON.stringify(obj),
             method: 'post',
             beforeSend: before,
-            success: after             
+            success: after,
+            complete: complete
         });
     }
 
-    this.findAll = function(before, after){
+    this.findAll = function(before, after, complete){
         $.ajax({
             url: resourceName,
             method: 'get',
             beforeSend: before,
-            success: after             
+            success: after,
+            complete: complete
         });
     }
 
-    this.findAllCustom = function(params, before, after){
+    this.findAllCustom = function(params, before, after, complete){
         $.ajax({
             url: resourceName + '/not/' + params['not'],
             method: 'get',
             beforeSend: before,
-            success: after
+            success: after,
+            complete: complete
         });
     }
 

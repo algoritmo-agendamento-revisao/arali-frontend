@@ -56,7 +56,9 @@ var Study = function($, container, modal, deck_id){
             var audio  = $(document.createElement('audio'));
             var source = $(document.createElement('source'));
             source.attr('type', 'audio/mpeg');
-            audio.attr('src', url);
+            source.attr('src', url);
+            audio.attr('controls', '');
+            audio.addClass('multimedia-audio');
             audio.append(source);
             return audio;
         }

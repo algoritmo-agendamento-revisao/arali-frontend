@@ -1,4 +1,4 @@
-var FormManager  = function($, form, resourceManager, beforeSubmit, afterSubmit){
+var FormManager  = function($, form, resourceManager, beforeSubmit, afterSubmit, completeSubmit){
     var moreData = {};
     var prepData = null;
     var fCleanData = null;
@@ -26,7 +26,7 @@ var FormManager  = function($, form, resourceManager, beforeSubmit, afterSubmit)
         allPrepData.forEach(function(func){
             data = func(data);
         });
-        resourceManager.create(data, beforeSubmit, afterSubmit);
+        resourceManager.create(data, beforeSubmit, afterSubmit, completeSubmit);
         return false;
     });
 
